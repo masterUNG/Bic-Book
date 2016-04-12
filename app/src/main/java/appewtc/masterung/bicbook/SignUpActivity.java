@@ -5,9 +5,18 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -16,6 +25,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -105,7 +115,35 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void updateByOKhttp() {
 
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RequestBody requestBody = new FormEncodingBuilder()
+                .add("isAdd", "true")
+                .add("ID_Card", idCardString)
+                .add("Password", passwordString)
+                .build();
+        Request.Builder builder = new Request.Builder();
+        Request request = builder.url(strURL).post(requestBody).build();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                Toast.makeText(SignUpActivity.this, "Cannot Update",
+                        Toast.LENGTH_SHORT).show();
+            }   //onFailure
 
+            @Override
+            public void onResponse(Response response) throws IOException {
+
+                try {
+
+                    Log.d("12April", "Response  ==> " + response.body().string());
+
+                } catch (Exception e) {
+                    Log.d("12April", "Error e ==> " + e.toString());
+                }
+
+            }   //onResponse
+        });
 
     }   // update
 
