@@ -23,6 +23,7 @@ public class SignUpActivity extends AppCompatActivity {
     //Explicit
     private EditText idCardEditText, passwordEditText;
     private String idCardString, passwordString;
+    private String strURL = "http://swiftcodingthai.com/bic/php_add_user_master.php";
 
 
     @Override
@@ -83,7 +84,11 @@ public class SignUpActivity extends AppCompatActivity {
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                updateDataToServer();
+                //updateDataToServer();
+
+                //Try use OKhttp
+                updateByOKhttp();
+
                 dialogInterface.dismiss();
             }   // onClick
         });
@@ -97,6 +102,12 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     }   // confirmData
+
+    private void updateByOKhttp() {
+
+
+
+    }   // update
 
     private void updateDataToServer() {
 
