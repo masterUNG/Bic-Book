@@ -1,10 +1,11 @@
 package appewtc.masterung.bicbook;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -158,12 +159,41 @@ public class MainActivity extends AppCompatActivity {
         if (idCardString.equals("") || passwordString.equals("")) {
             //Have Space
             myAlert("โปรดกรอกให้ ครบทุกช่อง คะ");
-        }   else if (idCardString.length() != 13) {
+        } else if (idCardString.length() != 13) {
             // กรอก ID card ไม่เท่ากัน 13 หลัก
             myAlert("กรอก ID card ไม่เท่ากับ 13 หลัก");
+        } else {
+            checkUser();
         }
 
+
     }   // clickSignInMain
+
+    private void checkUser() {
+
+        try {
+
+            Log.d("20April", "id ==>" + idCardString);
+
+            SQLiteDatabase sqLiteDatabase = openOrCreateDatabase(MyOpenHelper.database_name,
+                    MODE_PRIVATE, null);
+            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM userTABLE WHERE ID_Card = " + "'" + idCardString + "'", null);
+            cursor.moveToFirst();
+
+            if (passwordString.equals(cursor.getString(cursor.getColumnIndex(MyManage.column_password)))) {
+                // Goto Service
+                myAlert("ยินดีต้อนรับ");
+            } else {
+                myAlert("Password ผิิด");
+            }
+
+
+        } catch (Exception e) {
+            myAlert("ไม่มี ID นี่ ในฐานข้อมูลของเรา");
+        }
+
+    }   // checkUser
+
 
     private void myAlert(String strAlert) {
         Toast.makeText(MainActivity.this, strAlert, Toast.LENGTH_SHORT).show();

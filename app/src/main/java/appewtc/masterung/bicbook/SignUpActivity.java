@@ -121,6 +121,7 @@ public class SignUpActivity extends AppCompatActivity {
                 .add("ID_Card", idCardString)
                 .add("Password", passwordString)
                 .build();
+
         Request.Builder builder = new Request.Builder();
         Request request = builder.url(strURL).post(requestBody).build();
         Call call = okHttpClient.newCall(request);
